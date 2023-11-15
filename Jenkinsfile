@@ -24,7 +24,7 @@ pipeline {
 
         registryDb = "${dockerUserName}/${imageNameDb}"
 
-        registryCredentials = 'dockerhub'
+        registryCredentials = 'dckr_pat_Z_CTZ32zjPCINVIacBQIpAtSxzM'
 
         secret_var = credentials('PasSword123')
 
