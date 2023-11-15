@@ -24,9 +24,9 @@ pipeline {
 
         registryDb = "${dockerUserName}/${imageNameDb}"
 
-        registryCredentials = 'dckr_pat_Z_CTZ32zjPCINVIacBQIpAtSxzM'
+        registryCredentials = 'dockerhub'
 
-        secret_var = credentials('password')
+        secret_var = credentials('MYSQL_ROOT_PASSWORD')
 
     }
 
