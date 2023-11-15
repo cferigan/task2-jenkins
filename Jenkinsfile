@@ -10,13 +10,13 @@ pipeline {
 
         // Use your DockerHub username
 
-        dockerUserName="chrisreeves1"
+        dockerUserName="cferigan"
 
         // Names of your Docker images
 
-        imageNameApp = "trio-task-flask-app-dev-work"
+        imageNameApp = "task2-app"
 
-        imageNameDb = "trio-task-mysql-dev-work"
+        imageNameDb = "task2-db"
 
         // Constructed registry paths
 
