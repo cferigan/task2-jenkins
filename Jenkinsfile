@@ -26,7 +26,7 @@ pipeline {
 
         registryCredentials = 'dckr_pat_Z_CTZ32zjPCINVIacBQIpAtSxzM'
 
-        secret_var = credentials('db-password')
+        secret_var = credentials('password')
 
     }
 
