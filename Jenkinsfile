@@ -26,7 +26,7 @@ pipeline {
 
         registryCredentials = 'dockerhub'
 
-        secret_var = credentials('db-password')
+        secret_var = credentials('PasSword123')
 
     }
 
