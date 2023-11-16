@@ -41,7 +41,7 @@ pipeline {
 
                 sh '''
                 ssh jenkins@connor-deploy <<EOF
-                export MYSQL_ROOT_PASSWORD=YOUR_NAME=${YOUR_NAME}
+                export MYSQL_ROOT_PASSWORD=${YOUR_NAME}
                 docker network rm task2-net && echo "task2-net removed" || echo "network already removed"
                 docker network create task2-net
                 docker stop flask-db && echo "Stopped db" || echo "db is not running"
