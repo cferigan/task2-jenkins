@@ -55,7 +55,7 @@ pipeline {
                 docker network create task2-net
                 docker run -d --name mysql --network task2-net -e MYSQL_ROOT_PASSWORD=${YOUR_NAME} cferigan/task2-db
                 docker run -d -p 80:5000 --name flask-app --network task2-net -e MYSQL_ROOT_PASSWORD=${YOUR_NAME} cferigan/task2-jenkins
-                docker run -d --name nginx --network task2-net -p 80:80 cferigan/task2-nginx
+                docker run -d --name nginx --network task2-net -p 81:80 cferigan/task2-nginx
                 '''
 
             }
