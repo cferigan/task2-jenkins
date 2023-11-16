@@ -40,8 +40,8 @@ pipeline {
                 ssh jenkins@connor-deploy <<EOF
                 docker network rm task2-net && echo "task2-net removed" || echo "network already removed"
                 docker network create task2-net
-                docker stop db && echo "Stopped db" || echo "db is not running"
-                socker rm db && echo "removed db" || echo "db does not exist"
+                docker stop flask-db && echo "Stopped db" || echo "db is not running"
+                socker rm flask-db && echo "removed db" || echo "db does not exist"
                 docker stop nginx && echo "Stopped nginx" || echo "nginx is not running"
                 docker rm nginx && echo "removed nginx" || echo "nginx does not exist"
                 docker stop flask-app && echo "Stopped flask-app" || echo "flask-app is not running"
