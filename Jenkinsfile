@@ -1,105 +1,56 @@
-def appImage
-
-def dbImage
-
 pipeline {
 
     agent any
 
-    environment {
-
-        // Use your DockerHub username
-
-        dockerUserName="cferigan"
-
-        // Names of your Docker images
-
-        imageNameApp = "task2-app"
-
-        imageNameDb = "task2-db"
-
-        // Constructed registry paths
-
-        registryApp = "${dockerUserName}/${imageNameApp}"
-
-        registryDb = "${dockerUserName}/${imageNameDb}"
-
-        registryCredentials = 'dockerhub'
-
-        secret_var = credentials('MYSQL_ROOT_PASSWORD')
-
-    }
-
     stages {
 
-        stage('Init') {
+        stage('Build') {
 
-steps {
+            steps {
 
-                script {
-
-                    sh 'docker rm -f $(docker ps -qa) || true'
-
-                    sh 'docker network create trio-task-network || true'
-
-                    sh 'docker volume create new-volume'
-
-                }
+                sh '''
+                docker build -t cferigan/task2-jenkins .
+                docker build -t cferigan/task2-db db
+                docker build -t cferigan/task1-nginx nginx
+                
+                '''
 
             }
 
         }
-
-        stage('Build and Run Containers') {
+        
+        stage('Push') {
 
             steps {
 
-                script {
-
-                    // Build the custom images
-
-                    appImage = docker.build("${registryApp}:${env.BUILD_NUMBER}", "flask-app")
-
-                    dbImage = docker.build("${registryDb}:${env.BUILD_NUMBER}", "db")
-
-                    // Run containers
-
-                    dbImage.run("-d --name mysql --network trio-task-network -v new-volume:/var/lib/mysql")
-
-                    appImage.run("-d -e MYSQL_ROOT_PASSWORD=${secret_var} --name flask-app --network trio-task-network")
-
-                    // Use standard Nginx image and bind mount for custom configuration
-
-                    docker.image('nginx:latest').run("-d --name nginx -p 80:80 --network trio-task-network -v \$(pwd)/nginx/nginx.conf:/etc/nginx/nginx.conf")
-
-                }
+                sh '''
+                docker push cferigan/task2-jenkins
+                docker push cferigan/task2-db
+                docker push cferigan/task2-nginx
+                '''
 
             }
 
         }
-
-        stage('Push Images to DockerHub') {
+          stage('Deploy') {
 
             steps {
 
-                script {
-
-                    docker.withRegistry('', registryCredentials) {
-
-                        appImage.push("${env.BUILD_NUMBER}")
-
-                        appImage.push("latest")
-
-                        dbImage.push("${env.BUILD_NUMBER}")
-
-                        dbImage.push("latest")
-
-                    }
-
-                }
+                sh '''
+                ssh jenkins@connor-deploy <<EOF
+                docker network rm task2-net && echo "task2-net removed" || echo "network already removed"
+                docker network create task2-net
+                docker stop db && echo "Stopped db" || echo "db is not running"
+                docker stop nginx && echo "Stopped nginx" || echo "nginx is not running"
+                docker rm nginx && echo "removed nginx" || echo "nginx does not exist"
+                docker stop flask-app && echo "Stopped flask-app" || echo "flask-app is not running"
+                docker rm flask-app && echo "removed flask-app" || echo "flask-app does not exist"
+                docker run -d -p 82:5000 --name flask-app --network task1-net cferigan/task1-jenkins
+                docker run -d --name nginx --network task1-net -p 83:80 cferigan/task1-nginx
+                '''
 
             }
-
+ 
         }
 
     }
