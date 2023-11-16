@@ -50,8 +50,8 @@ pipeline {
                 docker rm nginx && echo "removed nginx" || echo "nginx does not exist"
                 docker stop flask-app && echo "Stopped flask-app" || echo "flask-app is not running"
                 docker rm flask-app && echo "removed flask-app" || echo "flask-app does not exist"
-                docker run -d --name flask-db --network task2-net -e MYSQL_ROOT_PASSWORD=YOUR_NAME=${YOUR_NAME} cferigan/task2-db
-                docker run -d -p 80:5000 --name flask-app --network task2-net -e MYSQL_ROOT_PASSWORD=YOUR_NAME=${YOUR_NAME} cferigan/task2-jenkins
+                docker run -d --name flask-db --network task2-net -e MYSQL_ROOT_PASSWORD=${YOUR_NAME} cferigan/task2-db
+                docker run -d -p 80:5000 --name flask-app --network task2-net -e MYSQL_ROOT_PASSWORD=${YOUR_NAME} cferigan/task2-jenkins
                 docker run -d --name nginx --network task2-net -p 82:80 cferigan/task2-nginx
                 '''
 
