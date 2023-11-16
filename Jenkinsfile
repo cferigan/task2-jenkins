@@ -2,7 +2,7 @@ pipeline {
 
     agent any
     environment {
-        MY_SQL_ROOT_PASSWORD = credentials("YOUR_NAME")
+        MYSQL_ROOT_PASSWORD = credentials("YOUR_NAME")
     }
 
     stages {
@@ -44,7 +44,7 @@ pipeline {
                 docker pull cferigan/task2-db
                 docker pull cferigan/task2-app
                 docker pull cferigan/task2-nginx
-                export MYSQL_ROOT_PASSWORD=${YOUR_NAME}
+                export MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
                 docker stop mysql && echo "Stopped db" || echo "db is not running"
                 docker rm mysql && echo "removed db" || echo "db does not exist"
                 docker stop nginx && echo "Stopped nginx" || echo "nginx is not running"
@@ -53,8 +53,8 @@ pipeline {
                 docker rm flask-app && echo "removed flask-app" || echo "flask-app does not exist"
                 docker network rm task2-net && echo "task2-net removed" || echo "network already removed"
                 docker network create task2-net
-                docker run -d --name mysql --network task2-net -e MYSQL_ROOT_PASSWORD=${YOUR_NAME} cferigan/task2-db
-                docker run -d -p 80:5000 --name flask-app --network task2-net -e MYSQL_ROOT_PASSWORD=${YOUR_NAME} cferigan/task2-jenkins
+                docker run -d --name mysql --network task2-net -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} cferigan/task2-db
+                docker run -d -p 80:5000 --name flask-app --network task2-net -e MYSQL_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD} cferigan/task2-jenkins
                 docker run -d --name nginx --network task2-net -p 81:80 cferigan/task2-nginx
                 '''
 
