@@ -2,7 +2,7 @@ pipeline {
 
     agent any
     environment {
-        YOUR_NAME = credentials("YOUR_NAME")
+        MY_SQL_ROOT_PASSWORD = credentials("YOUR_NAME")
     }
 
     stages {
