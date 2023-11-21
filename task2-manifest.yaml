@@ -1,0 +1,66 @@
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: flask
+  name: flask-app
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 5000
+  selector:
+    app: flask
+  type: ClusterIP
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    app: flask
+  name: flask-app
+spec:
+  containers:
+  - env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: PasSWord123
+    image: agray998/task2-app
+    imagePullPolicy: IfNotPresent
+    name: flask-app
+    ports:
+    - containerPort: 80
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+spec:
+  type: ClusterIP
+  selector:
+    run: task2-db
+  ports:
+  - protocol: TCP
+    port: 3306
+    targetPort: 3306
+
+---
+
+apiVersion: v1
+kind: Pod
+metadata:
+  labels:
+    run: task2-db
+  name: mysql
+spec:
+  containers:
+  - env:
+    - name: MYSQL_ROOT_PASSWORD
+      value: PasSWord123
+    name: task2-db
+    image: agray998/task2-db
+    ports:
+    - containerPort: 80
