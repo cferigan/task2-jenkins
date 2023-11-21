@@ -6,9 +6,8 @@ metadata:
   name: flask-app
 spec:
   ports:
-  - port: 80
+  - port: 5000
     protocol: TCP
-    targetPort: 5000
   selector:
     app: flask
   type: ClusterIP
