@@ -24,7 +24,10 @@ spec:
   containers:
   - env:
     - name: MYSQL_ROOT_PASSWORD
-      value: PasSWord123
+      valueFrom:
+        secretKeyRef:
+          name: db-root-password
+          key: password
     image: agray998/task2-app
     imagePullPolicy: IfNotPresent
     name: flask-app
@@ -58,7 +61,10 @@ spec:
   containers:
   - env:
     - name: MYSQL_ROOT_PASSWORD
-      value: PasSWord123
+      valueFrom:
+        secretKeyRef:
+          name: db-root-password
+          key: password
     name: task2-db
     image: agray998/task2-db
     ports:
