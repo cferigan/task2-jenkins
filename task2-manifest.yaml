@@ -1,3 +1,32 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: app-replicas
+  labels:
+    task: task2
+spec:
+  replicas: 3
+  selector: 
+    matchLabels:
+      app: flask
+  template:
+    metadata:
+      name: flask-app
+      labels:
+        app: flask
+    spec:
+    containers:
+    - image: agray998/task2-app
+      name: flask-app
+      env:
+      - name: MYSQL_ROOT_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: db-root-password
+            key: password
+
+---
+
 apiVersion: v1
 kind: Service
 metadata:
