@@ -15,15 +15,15 @@ spec:
       labels:
         app: flask
     spec:
-    containers:
-    - image: agray998/task2-app
-      name: flask-app
-      env:
-      - name: MYSQL_ROOT_PASSWORD
-        valueFrom:
-          secretKeyRef:
-            name: db-root-password
-            key: password
+     containers:
+      - image: agray998/task2-app
+        name: flask-app
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: db-root-password
+              key: password
 
 ---
 
